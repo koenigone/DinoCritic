@@ -1,0 +1,37 @@
+body {
+  overflow: hidden;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+nav {
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+}
+
+nav .logo {
+  font-size: 60px;
+}
+
+section {
+  overflow-y: scroll;
+  white-space: nowrap;
+  height: 100vh;
+  width: 40%;
+  margin: 0 auto;
+  padding: 10px;
+  box-shadow: 0px 0px 30px 5px rgba(150, 150, 150, 0.205);
+}
+
+.form-control-borderless {
+  border: none;
+}
+
+.card .description_container {
+  white-space: pre-line;
+}
