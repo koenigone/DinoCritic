@@ -35,3 +35,8 @@ section {
 .card .description_container {
   white-space: pre-line;
 }
+
+.card-img-responsive {
+  height: 150px;
+  max-width: 250px;
+}
