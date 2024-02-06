@@ -47,7 +47,7 @@ function generateGameCardHTML(game) {
         <div class="bg-secondary text-light rounded p-2 d-flex justify-content-around mb-3">
           <span>Game length: ${game.playtime}h</span>
           <span>Genre: ${game.genres[0].name}</span>
-          <span>Rating: ${game.esrb_rating.name}</span>
+
         </div>
         <div class="text-center mb-3">
           <div class="platforms-container d-flex flex-wrap justify-content-center">${platformsHTML}</div>
@@ -57,7 +57,7 @@ function generateGameCardHTML(game) {
         </div>
       </div>
     </div>
-  `;
+  `; //  <span>Rating: ${game.esrb_rating[0].name}</span>
 }
 
 // Function to generate game cards and append them to a container
@@ -84,7 +84,7 @@ $(document).ready(function () {
     const gameContainer = $('#searched_game_container');
 
     $.ajax({
-      url: 'getGameCritic.php',
+      url: 'vendor/PHP/getGameCritic.php',
       data: { gameName: gameName },
       method: 'POST',
       dataType: 'JSON',
@@ -108,7 +108,7 @@ $(document).ready(function () {
   const allGamesContainer = $('#games_container');
 
   $.ajax({
-    url: 'getAllGames.php',
+    url: 'vendor/PHP/getAllGames.php',
     method: 'GET',
     dataType: 'json',
     success: function (response) {
