@@ -1,16 +1,28 @@
 // Function to generate game card HTML
 function generateGameCardHTML(game) {
-  const ratingsHTML = game.ratings.map(rating => `
-    <div>
-      <span>${rating.title}:</span>
-      <span>${rating.percent}%</span>
-    </div>
-  `).join('');
+  const ratingsHTML = game.ratings.map(rating => {
+    let backgroundColor = '';
+    if (rating.percent >= 40) {
+      backgroundColor = 'bg-success';
+    } else if (rating.percent >= 25 && rating.percent <= 39) {
+      backgroundColor = 'bg-primary';
+    } else if (rating.percent >= 18 && rating.percent <= 24) {
+      backgroundColor = 'bg-secondary';
+    } else if (rating.percent >= 10 && rating.percent <= 17) {
+      backgroundColor = 'bg-warning'
+    } else {
+      backgroundColor = 'bg-danger';
+    }
+    return `
+      <div class="mb-3">
+        <span class="${backgroundColor} text-light rounded p-2">${rating.title}:</span>
+        <span class="fw-bold">${rating.percent}%</span>
+      </div>
+    `;
+  }).join('');
 
   const platformsHTML = game.platforms.map(platform => `
-    <div>
-      <span>${platform.platform.name}</span>
-    </div>
+    <span class="bg-info text-light rounded p-2 m-1">${platform.platform.name}</span>
   `).join('');
 
   return `
@@ -19,23 +31,30 @@ function generateGameCardHTML(game) {
         <img class="card-img-left card-img-responsive" src="${game.background_image}" />
         <div class="card-body">
           <div class="d-flex justify-content-between">
-            <div style="width: 200px; overflow: hidden;">
+            <div class="game-title-holder">
               <h5 class="card-title" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${game.name}</h5>
             </div>
             <span class="bg-success rounded p-2 text-light" title="Metacritic Rating">${game.metacritic}</span>
           </div>
           <p class="card-text">${game.released}</p>
           <div class="d-flex justify-content-center">
-            <a href="#" class="show_desc_btn d-flex justify-content-end">Top Reviews</a>
+            <a href="#" class="show_desc_btn d-flex justify-content-end">Reviews & Info</a>
           </div>
         </div>
       </div>
 
       <div class="card-slider">
-        <span>${ratingsHTML}</span>
-        <span>Game length: ${game.playtime}</span>
-        <span>Last updated: ${game.updated}</span>
-        <div class="platforms">${platformsHTML}</div>
+        <div class="bg-secondary text-light rounded p-2 d-flex justify-content-around mb-3">
+          <span>Game length: ${game.playtime}h</span>
+          <span>Genre: ${game.genres[0].name}</span>
+          <span>Rating: ${game.esrb_rating.name}</span>
+        </div>
+        <div class="text-center mb-3">
+          <div class="platforms-container d-flex flex-wrap justify-content-center">${platformsHTML}</div>
+        </div>
+        <div class="d-flex justify-content-between m-4">
+          <span>${ratingsHTML}</span>
+        </div>
       </div>
     </div>
   `;
@@ -72,6 +91,7 @@ $(document).ready(function () {
       success: function (response) {
         if (response.success) {
           var games = response.data.results;
+          gameContainer.html('');
           generateGameCards(gameContainer, games);
         } else {
           alert(response.message);

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="814618201581289552.png">
   <link rel="stylesheet" href="style.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -14,44 +15,32 @@
 <body>
   <nav class="d-flex justify-content-between">
     <div>
-      <h1 class="text-success logo"><i class="fa-solid fa-gamepad"></i></h1>
+      <img src="814618201581289552.png" height="85px">
     </div>
     <div>
-      <h1 class="fw-bold">DinoCritics</h1>
+      <h1 class="fw-bold logoName">DinoCritics</h1>
     </div>
   </nav>
 
   <section>
 
-    <!-- SEARCH BAR -->
-    <div class="d-flex justify-content-center search-container">
-      <div class="col-11 mb-4">
-        <form class="card" id="main_search_form">
-          <div class="card-body row no-gutters align-items-center">
-            <div class="col-auto">
-              <i class="fas fa-search h4 text-body"></i>
-            </div>
-            <!--end of col-->
-            <div class="col">
-              <input type="search" class="form-control form-control-lg form-control-borderless" id="searchGameInput" name="searchGameInput" placeholder="Ex. Elden Ring..">
-            </div>
-            <!--end of col-->
-            <div class="col-auto">
-              <button class="btn btn-lg btn-success" type="submit">Search</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+  <!-- SEARCH BAR -->
+  <div class="input-group mb-3 mt-2 search-container">
+    <form class="d-flex justify-content-center" id="main_search_form">
+      <input type="text" class="form-control" id="searchGameInput" name="searchGameInput" placeholder="Ex. Elden Ring">
+      <button type="submit" class="btn btn-success submit-btn"><span><i class="fa-solid fa-magnifying-glass"></i></span></button>
+    </form>
+  </div>
 
-    <div>
-      <div id="searched_game_container">
-        <!-- searched game -->
-      </div>
-      <div id="games_container">
-        <!-- top games -->
-      </div>
+  <div>
+    <div id="searched_game_container">
+      <!-- searched game -->
     </div>
+    <div id="games_container">
+      <!-- top games -->
+    </div>
+  </div>
+
 
   </section>
 </body>
