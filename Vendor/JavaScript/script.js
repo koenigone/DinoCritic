@@ -1,18 +1,23 @@
+function ratingsColors(rating) { // change rating background color
+  let color = '';
+  if (rating >= 40) {
+    color = 'bg-success';
+  } else if (rating >= 25 && rating <= 39) {
+    color = 'bg-primary';
+  } else if (rating >= 18 && rating <= 24) {
+    color = 'bg-secondary';
+  } else if (rating >= 10 && rating <= 17) {
+    color = 'bg-warning';
+  } else {
+    color = 'bg-danger';
+  }
+  return color; 
+}
+
 // Function to generate game card HTML
 function generateGameCardHTML(game) {
   const ratingsHTML = game.ratings.map(rating => {
-    let backgroundColor = '';
-    if (rating.percent >= 40) {
-      backgroundColor = 'bg-success';
-    } else if (rating.percent >= 25 && rating.percent <= 39) {
-      backgroundColor = 'bg-primary';
-    } else if (rating.percent >= 18 && rating.percent <= 24) {
-      backgroundColor = 'bg-secondary';
-    } else if (rating.percent >= 10 && rating.percent <= 17) {
-      backgroundColor = 'bg-warning'
-    } else {
-      backgroundColor = 'bg-danger';
-    }
+    const backgroundColor = ratingsColors(rating.percent);
     return `
       <div class="mb-3">
         <span class="${backgroundColor} text-light rounded p-2">${rating.title}:</span>
@@ -45,8 +50,9 @@ function generateGameCardHTML(game) {
 
       <div class="card-slider">
         <div class="bg-secondary text-light rounded p-2 d-flex justify-content-around mb-3">
-          <span>Game length: ${game.playtime}h</span>
-          <span>Genre: ${game.genres[0].name}</span>
+          <span>Game length: ${game.playtime ? game.playtime : 'N/A'}h</span>
+          <span>Genre: ${game.genres[0].name ? game.genres[0].name : 'N/A'}</span>
+          <span>Rating: ${game.esrb_rating ? game.esrb_rating.name : 'N/A'}</span>
 
         </div>
         <div class="text-center mb-3">
@@ -57,7 +63,7 @@ function generateGameCardHTML(game) {
         </div>
       </div>
     </div>
-  `; //  <span>Rating: ${game.esrb_rating[0].name}</span>
+  `;
 }
 
 // Function to generate game cards and append them to a container
@@ -123,4 +129,110 @@ $(document).ready(function () {
       alert('Error fetching data');
     }
   });
+});
+
+
+// Generate Options for Select Elements genres, platforms and publishers
+$(document).ready(function() {
+  // Select Elements
+  const selectGenre = $('#select_genre_input');
+  const selectPlatform = $('#select_platform_input');
+  const selectPublisher = $('#select_publisher_input');
+
+  $.ajax({ // Generate game genres
+    url: 'Vendor/PHP/gameGenres.php',
+    method: 'GET',
+    dataType: 'JSON',
+    success: function(response) {
+      if (response.success) {
+        const genresData = response.data.results;
+
+        genresData.forEach(function(genre) {
+          var genresOptions = `
+          <option value="${genre.name}">${genre.name}</option>
+          `;
+          selectGenre.append(genresOptions);
+        });
+
+      } else {
+        alert(response.message);
+      }
+    },
+    error: function() {
+      alert('Failed fetching genres');
+    }
+  });
+
+  $.ajax({ // Generate platforms
+    url: 'Vendor/PHP/getPlatforms.php',
+    method: 'GET',
+    dataType: 'JSON',
+    success: function(response) {
+      if (response.success) {
+        const platformData = response.data.results;
+
+        platformData.forEach(function(platform) {
+          platformsOptions = `
+          <option value="${platform.name}">${platform.name}</option>
+          `;
+
+          selectPlatform.append(platformsOptions);
+        })
+      } else {
+        alert(response.message);
+      }
+    },
+    error: function() {
+      alert('Error fetching platforms');
+    }
+  });
+
+  $.ajax({ // Generate game publishers
+    url: 'Vendor/PHP/getPublishers.php',
+    method: 'GET',
+    dataType: 'JSON',
+    success: function(response) {
+      if (response.success) {
+        const publishersData = response.data.results;
+
+        publishersData.forEach(function(publisher) {
+          var publisherOptions = `
+          <option value="${publisher.name}">${publisher.name}</option>
+          `;
+
+          selectPublisher.append(publisherOptions);
+        })
+      } else {
+        alert(response.message);
+      }
+    },
+    error: function() {
+      alert('Error fetching publishers');
+    }
+  });
+
+  $(selectGenre).change(function() { // display games by genre
+    const genreValue = $(this).val();
+    const gameContainer = $('#games_container');
+  
+    $.ajax({
+      url: 'Vendor/PHP/displayGenres.php',
+      method: 'POST',
+      dataType: 'JSON',
+      data: { genreValue: genreValue },
+      success: function(response) {
+        if (response.success) {
+          gameContainer.html('');
+          var selectedData = response.data.results;
+          generateGameCards(gameContainer, selectedData);
+        } else {
+          alert(response.message);
+        }
+      },
+      error: function() {
+        alert('Error fetching genre data');
+      }
+    });
+  });
+    
 });

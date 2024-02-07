@@ -9,7 +9,7 @@ if (isset($_POST['gameName'])) {
     $gameCriticCURL = curl_init();
 
     curl_setopt_array($gameCriticCURL, [
-      CURLOPT_URL => 'https://api.rawg.io/api/games?key=ce159359e89a44c69acc5360188d2333&search=' . urlencode($gameName),
+      CURLOPT_URL => 'https://api.rawg.io/api/games?key=ce159359e89a44c69acc5360188d2333&search=' . urlencode($gameName) . '&page_size=1',
       CURLOPT_RETURNTRANSFER => true,
     ]);  
 

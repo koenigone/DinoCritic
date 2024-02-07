@@ -23,12 +23,28 @@
   </nav>
 
   <section>
-
   <!-- SEARCH BAR -->
   <div class="input-group mb-3 mt-2 search-container">
     <form class="d-flex justify-content-center" id="main_search_form">
-      <input type="text" class="form-control" id="searchGameInput" name="searchGameInput" placeholder="Ex. Elden Ring">
+      <input type="text" class="form-control text-center" id="searchGameInput" name="searchGameInput" placeholder="Ex. Elden Ring">
       <button type="submit" class="btn btn-success submit-btn"><span><i class="fa-solid fa-magnifying-glass"></i></span></button>
+    </form>
+  </div>
+  <div class="mb-3">
+    <form>
+      <div class="d-flex">
+      <select class="form-select form-select-sm text-center" id="select_genre_input">
+        <!-- generate options -->
+      </select>
+
+      <select class="form-select form-select-sm text-center" id="select_platform_input">
+        <!-- generate options -->
+      </select>
+
+      <select class="form-select form-select-sm text-center" id="select_publisher_input">
+        <!-- generate options -->
+      </select>
+      </div>
     </form>
   </div>
 
