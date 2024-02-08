@@ -69,6 +69,10 @@ function generateGameCardHTML(game) {
 
   getGameAchievements(game.slug);
 
+  const screenshotsHTML = game.short_screenshots.map(screenshot => `
+    <img src="${screenshot.image}" height="100px">
+  `).join('');
+
   return `
     <div class="game-card-container">
       <div class="card flex-row mb-3">
@@ -99,6 +103,9 @@ function generateGameCardHTML(game) {
         <div class="d-flex justify-content-between m-4">
           <span>${ratingsHTML}</span>
           <span class="achievements-container-${game.slug}"></span> <!-- Use specific class for each game -->
+        </div>
+        <div>
+          ${screenshotsHTML}
         </div>
         <div class="d-flex justify-content-between m-4">
           <span>${tagsHTML}</span>
