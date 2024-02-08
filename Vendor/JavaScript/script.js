@@ -16,18 +16,26 @@ function ratingsColors(rating) { // change rating background color
 
 // Function to generate game card HTML
 function generateGameCardHTML(game) {
+
+  // Get all ratings
   const ratingsHTML = game.ratings.map(rating => {
     const backgroundColor = ratingsColors(rating.percent);
     return `
       <div class="mb-3">
-        <span class="${backgroundColor} text-light rounded p-2">${rating.title}:</span>
-        <span class="fw-bold">${rating.percent}%</span>
+        <span class="${backgroundColor} text-light rounded p-2">${rating.title ? rating.title: 'N/A'}:</span>
+        <span class="fw-bold">${rating.percent ? rating.percent: 'N/A'}%</span>
       </div>
     `;
   }).join('');
 
+  // Get all platforms
   const platformsHTML = game.platforms.map(platform => `
-    <span class="bg-info text-light rounded p-2 m-1">${platform.platform.name}</span>
+    <span class="bg-info text-light rounded p-2 m-1">${platform.platform.name ? platform.platform.name: 'N/A'}</span>
+  `).join('');
+
+  // Get all genres
+  const genresHTML = game.genres.map(genre => `
+    <span>${genre.name ? genre.name: 'N/A'}</span>
   `).join('');
 
   return `
@@ -39,9 +47,9 @@ function generateGameCardHTML(game) {
             <div class="game-title-holder">
               <h5 class="card-title" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${game.name}</h5>
             </div>
-            <span class="bg-success rounded p-2 text-light" title="Metacritic Rating">${game.metacritic}</span>
+            <span class="bg-success rounded p-2 text-light" title="Metacritic Rating">${game.metacritic ? game.metacritic: 'N/A'}</span>
           </div>
-          <p class="card-text">${game.released}</p>
+          <p class="card-text">${game.released ? game.released: 'N/A'}</p>
           <div class="d-flex justify-content-center">
             <a href="#" class="show_desc_btn d-flex justify-content-end">Reviews & Info</a>
           </div>
@@ -50,8 +58,8 @@ function generateGameCardHTML(game) {
 
       <div class="card-slider">
         <div class="bg-secondary text-light rounded p-2 d-flex justify-content-around mb-3">
-          <span>Game length: ${game.playtime ? game.playtime : 'N/A'}h</span>
-          <span>Genre: ${game.genres[0].name ? game.genres[0].name : 'N/A'}</span>
+          <span>Game length: ${game.playtime ? game.playtime + 'h' : 'N/A'}</span>
+          <span>Genre: ${genresHTML}</span>
           <span>Rating: ${game.esrb_rating ? game.esrb_rating.name : 'N/A'}</span>
 
         </div>
@@ -69,10 +77,8 @@ function generateGameCardHTML(game) {
 // Function to generate game cards and append them to a container
 function generateGameCards(container, games) {
   games.forEach(function (game) {
-    if (game.metacritic !== null) {
-      const gameCardHTML = generateGameCardHTML(game);
-      container.append(gameCardHTML);
-    }
+    const gameCardHTML = generateGameCardHTML(game);
+    container.append(gameCardHTML);
   });
 
   $('.card-slider').hide();
@@ -87,7 +93,8 @@ $(document).ready(function () {
     e.preventDefault();
 
     var gameName = $('#searchGameInput').val();
-    const gameContainer = $('#searched_game_container');
+    const searchedGameContainer = $('#searched_game_container');
+    const gameContainer = $('#games_container');
 
     $.ajax({
       url: 'vendor/PHP/getGameCritic.php',
@@ -97,6 +104,7 @@ $(document).ready(function () {
       success: function (response) {
         if (response.success) {
           var games = response.data.results;
+          searchedGameContainer.html('');
           gameContainer.html('');
           generateGameCards(gameContainer, games);
         } else {
@@ -134,6 +142,10 @@ $(document).ready(function () {
 
 // Generate Options for Select Elements genres, platforms and publishers
 $(document).ready(function() {
+
+  const gameContainer = $('#games_container');
+  const sortedGamesContainer = $('#sorted_games_container');
+
   // Select Elements
   const selectGenre = $('#select_genre_input');
   const selectPlatform = $('#select_platform_input');
@@ -173,7 +185,7 @@ $(document).ready(function() {
 
         platformData.forEach(function(platform) {
           platformsOptions = `
-          <option value="${platform.name}">${platform.name}</option>
+          <option value="${platform.id}">${platform.name}</option>
           `;
 
           selectPlatform.append(platformsOptions);
@@ -197,7 +209,7 @@ $(document).ready(function() {
 
         publishersData.forEach(function(publisher) {
           var publisherOptions = `
-          <option value="${publisher.name}">${publisher.name}</option>
+          <option value="${publisher.id}">${publisher.name}</option>
           `;
 
           selectPublisher.append(publisherOptions);
@@ -211,28 +223,75 @@ $(document).ready(function() {
     }
   });
 
-  $(selectGenre).change(function() { // display games by genre
+  $(selectGenre).change(function() { // sort games by genre
     const genreValue = $(this).val();
-    const gameContainer = $('#games_container');
   
     $.ajax({
-      url: 'Vendor/PHP/displayGenres.php',
+      url: 'Vendor/PHP/sortBy/sortByGenre.php',
       method: 'POST',
       dataType: 'JSON',
       data: { genreValue: genreValue },
       success: function(response) {
         if (response.success) {
           gameContainer.html('');
+          sortedGamesContainer.html('');
           var selectedData = response.data.results;
-          generateGameCards(gameContainer, selectedData);
+          generateGameCards(sortedGamesContainer, selectedData);
         } else {
           alert(response.message);
         }
       },
       error: function() {
-        alert('Error fetching genre data');
+        alert('Error sorting by genre');
       }
     });
   });
-    
+
+  $(selectPlatform).change(function() { // sort games by platform
+    const platformValue = $(this).val();
+  
+    $.ajax({
+      url: 'Vendor/PHP/sortBy/sortByPlatform.php',
+      method: 'POST',
+      dataType: 'JSON',
+      data: { platformValue: platformValue },
+      success: function(response) {
+        if (response.success) {
+          gameContainer.html('');
+          sortedGamesContainer.html('');
+          var selectedData = response.data.results;
+          generateGameCards(sortedGamesContainer, selectedData);
+        } else {
+          alert(response.message);
+        }
+      },
+      error: function() {
+        alert('Error sorting by genre');
+      }
+    });
+  });
+
+  $(selectPublisher).change(function() {
+    const publisherValue = $(this).val();
+
+    $.ajax({
+      url: 'Vendor/PHP/sortBy/sortByPublisher.php',
+      method: 'POST',
+      dataType: 'JSON',
+      data: { publisherValue: publisherValue },
+      success: function(response) {
+        if (response.success) {
+          var selectedData = response.data.results;
+          gameContainer.html('');
+          sortedGamesContainer.html('');
+          generateGameCards(sortedGamesContainer, selectedData);
+        } else {
+          alert(response.message);
+        }
+      },
+      error: function() {
+        alert('Error sorting by publisher');
+      }
+    });
+  })
 });

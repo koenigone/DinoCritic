@@ -54,6 +54,7 @@ section {
   .logo, .logoName { display: none; }
   section { width: 100%; }
   .search-container form input { width: 280px; height: 45px; }
+  .form-select { font-size: 11px; }
   .card-img-responsive { height: 115px; max-width: 160px; }
   .game-title-holder { width: 110px; }
   .game-card-container h5 { font-size: 15px; }
