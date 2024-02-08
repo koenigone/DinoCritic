@@ -16,7 +16,6 @@ function ratingsColors(rating) { // change rating background color
 
 // Function to generate game card HTML
 function generateGameCardHTML(game) {
-
   // Get all ratings
   const ratingsHTML = game.ratings.map(rating => {
     const backgroundColor = ratingsColors(rating.percent);
@@ -37,6 +36,38 @@ function generateGameCardHTML(game) {
   const genresHTML = game.genres.map(genre => `
     <span>${genre.name ? genre.name: 'N/A'}</span>
   `).join('');
+
+  // Get all tags
+  const tagsHTML = game.tags.map(tag => `
+    <span class="bg-secondary rounded p-1 text-light mr-1 game-tags-span">${tag.name}</span>
+  `).join('');
+
+  // Fetch game achievements
+  function getGameAchievements(gameSlug) {
+    $.ajax({
+      url: `https://api.rawg.io/api/games/${gameSlug}/achievements?key=ce159359e89a44c69acc5360188d2333`,
+      method: 'GET',
+      dataType: 'JSON',
+      success: function(data) {
+        if (data.results.length > 0) {
+          const achievementsHTML = data.results.map(achievement => `
+            <div>
+              <span>${achievement.name}</span>
+              <span>${achievement.description}</span>
+            </div>
+          `).join('');
+          $(`.achievements-container-${gameSlug}`).html(achievementsHTML);
+        } else {
+          $(`.achievements-container-${gameSlug}`).html('<span>No achievements found</span>');
+        }
+      },
+      error: function() {
+        $(`.achievements-container-${gameSlug}`).html('<span>Error loading achievements</span>');
+      }
+    });
+  }  
+
+  getGameAchievements(game.slug);
 
   return `
     <div class="game-card-container">
@@ -61,20 +92,23 @@ function generateGameCardHTML(game) {
           <span>Game length: ${game.playtime ? game.playtime + 'h' : 'N/A'}</span>
           <span>Genre: ${genresHTML}</span>
           <span>Rating: ${game.esrb_rating ? game.esrb_rating.name : 'N/A'}</span>
-
         </div>
         <div class="text-center mb-3">
           <div class="platforms-container d-flex flex-wrap justify-content-center">${platformsHTML}</div>
         </div>
         <div class="d-flex justify-content-between m-4">
           <span>${ratingsHTML}</span>
+          <span class="achievements-container-${game.slug}"></span> <!-- Use specific class for each game -->
+        </div>
+        <div class="d-flex justify-content-between m-4">
+          <span>${tagsHTML}</span>
         </div>
       </div>
     </div>
   `;
 }
 
-// Function to generate game cards and append them to a container
+// Generate game cards and append them to a container
 function generateGameCards(container, games) {
   games.forEach(function (game) {
     const gameCardHTML = generateGameCardHTML(game);
@@ -88,6 +122,7 @@ function generateGameCards(container, games) {
   });
 }
 
+// Search for games
 $(document).ready(function () {
   $('#main_search_form').submit(function (e) {
     e.preventDefault();
@@ -118,6 +153,7 @@ $(document).ready(function () {
   });
 });
 
+// Display all games
 $(document).ready(function () {
   const allGamesContainer = $('#games_container');
 
@@ -144,7 +180,6 @@ $(document).ready(function () {
 $(document).ready(function() {
 
   const gameContainer = $('#games_container');
-  const sortedGamesContainer = $('#sorted_games_container');
 
   // Select Elements
   const selectGenre = $('#select_genre_input');
@@ -234,9 +269,8 @@ $(document).ready(function() {
       success: function(response) {
         if (response.success) {
           gameContainer.html('');
-          sortedGamesContainer.html('');
           var selectedData = response.data.results;
-          generateGameCards(sortedGamesContainer, selectedData);
+          generateGameCards(gameContainer, selectedData);
         } else {
           alert(response.message);
         }
@@ -258,9 +292,8 @@ $(document).ready(function() {
       success: function(response) {
         if (response.success) {
           gameContainer.html('');
-          sortedGamesContainer.html('');
           var selectedData = response.data.results;
-          generateGameCards(sortedGamesContainer, selectedData);
+          generateGameCards(gameContainer, selectedData);
         } else {
           alert(response.message);
         }
@@ -283,8 +316,7 @@ $(document).ready(function() {
         if (response.success) {
           var selectedData = response.data.results;
           gameContainer.html('');
-          sortedGamesContainer.html('');
-          generateGameCards(sortedGamesContainer, selectedData);
+          generateGameCards(gameContainer, selectedData);
         } else {
           alert(response.message);
         }
