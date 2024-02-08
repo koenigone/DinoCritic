@@ -69,9 +69,51 @@ function generateGameCardHTML(game) {
 
   getGameAchievements(game.slug);
 
-  const screenshotsHTML = game.short_screenshots.map(screenshot => `
-    <img src="${screenshot.image}" height="100px">
+  const screenshotsHTML = game.short_screenshots.map((screenshot, index) => `
+    <div class="slide ${index === 0 ? 'active' : ''}">
+      <img src="${screenshot.image}" alt="Slide ${index + 1}">
+    </div>
   `).join('');
+
+  const dotsHTML = game.short_screenshots.map((screenshot, index) => `
+    <div class="dot ${index === 0 ? 'active-dot' : ''}"></div>
+  `).join('');
+
+  $(document).ready(function () {
+    let currentIndex = 0;
+    let slideCount = $('.slide').length;
+  
+    $('.prev').on('click', function () {
+      currentIndex--;
+      if (currentIndex < 0) {
+        currentIndex = 0; // Prevent scrolling beyond the first image
+      }
+      showSlide(currentIndex);
+    });
+  
+    $('.next').on('click', function () {
+      currentIndex++;
+      if (currentIndex >= slideCount) {
+        currentIndex = slideCount -1;
+      } else {
+        showSlide(currentIndex);
+      }
+    });
+  
+    $('.dot').on('click', function () {
+      currentIndex = $(this).index();
+      showSlide(currentIndex);
+    });
+  
+    function showSlide(index) {
+      $('.slide').hide().removeClass('active');
+      $('.dot').removeClass('active-dot');
+      $('.slide').eq(index).show().addClass('active');
+      $('.dot').eq(index).addClass('active-dot');
+    }
+  
+    showSlide(currentIndex);
+  });  
 
   return `
     <div class="game-card-container">
@@ -104,9 +146,19 @@ function generateGameCardHTML(game) {
           <span>${ratingsHTML}</span>
           <span class="achievements-container-${game.slug}"></span> <!-- Use specific class for each game -->
         </div>
-        <div>
+
+        <div class="slider-container">
+            
           ${screenshotsHTML}
+
+          <button class="prev">❮</button>
+          <button class="next">❯</button>
+
+          <div class="dots">
+            ${dotsHTML}
+          </div>
         </div>
+
         <div class="d-flex justify-content-between m-4">
           <span>${tagsHTML}</span>
         </div>
