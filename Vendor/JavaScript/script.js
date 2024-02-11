@@ -1,21 +1,38 @@
 function ratingsColors(rating) { // change rating background color
   let color = '';
   if (rating >= 40) {
-    color = 'bg-success';
+    color = 'custom-green';
   } else if (rating >= 25 && rating <= 39) {
-    color = 'bg-primary';
+    color = 'custom-blue';
   } else if (rating >= 18 && rating <= 24) {
-    color = 'bg-secondary';
+    color = 'custom-gray';
   } else if (rating >= 10 && rating <= 17) {
-    color = 'bg-warning';
+    color = 'custom-yellow';
   } else {
-    color = 'bg-danger';
+    color = 'custom-red';
   }
   return color; 
 }
 
-// Fetch game achievements
-function getGameAchievements(gameSlug) {
+function platformIcons(platform) { // change platform name to icon
+  let icon = '';
+  if (platform === 'PlayStation') {
+    icon = '<i class="fa-brands fa-playstation" title="Playstation"></i>';
+  } else if (platform === 'PC') {
+    icon = '<i class="fa-solid fa-desktop" title="PC"></i>';
+  } else if (platform === 'Xbox') {
+    icon = '<i class="fa-brands fa-xbox" title="Xbox"></i>';
+  } else if (platform === 'Apple Macintosh' || platform === 'iOS') {
+    icon = '<i class="fa-brands fa-apple" title="Apple Macintosh or iOS"></i>';
+  } else if (platform === 'Android') {
+    icon = '<i class="fa-brands fa-android" title="Android"></i>';
+  } else if (platform === 'Linux') {
+    icon = '<i class="fa-brands fa-linux" title="Linux"></i>';
+  } 
+  return icon;
+}
+
+function getGameAchievements(gameSlug) { // retrieve game achievements
   $.ajax({
     url: `https://api.rawg.io/api/games/${gameSlug}/achievements?key=ce159359e89a44c69acc5360188d2333`,
     method: 'GET',
@@ -23,21 +40,34 @@ function getGameAchievements(gameSlug) {
     success: function(data) {
       if (data.results.length > 0) {
         const achievementsHTML = data.results.map(achievement => `
+        <div class="game-achievement-container">
           <div>
-            <span>${achievement.name}</span>
-            <span>${achievement.description}</span>
+            <a href="#" class="achievement-name"><i class="fa-solid fa-caret-down"></i> ${achievement.name}</a>
           </div>
+          <div class="achievement-description-container">
+            <span> - ${achievement.description}</span>
+          </div>
+        </div>
         `).join('');
-        $(`.achievements-container-${gameSlug}`).html(achievementsHTML);
+        $(`.achievements-${gameSlug}`).html(achievementsHTML);
       } else {
-        $(`.achievements-container-${gameSlug}`).html('<span>No achievements found</span>');
+        $(`.achievements-${gameSlug}`).html('<span>No achievements found</span>');
       }
+
+      $('.achievement-description-container').hide();
+      $('.achievement-name').off('click').on('click', function() { // Open one
+        $(this).closest('.game-achievement-container').find('.achievement-description-container').slideToggle();
+      });
+
+      $('.achievement-open-all').off('click').on('click', function() { // Open all
+        $(this).closest('.game-card-container').find('.achievement-description-container').slideToggle();
+      });
     },
     error: function() {
-      $(`.achievements-container-${gameSlug}`).html('<span>Error loading achievements</span>');
+      $(`.achievements-${gameSlug}`).html('<span>Error loading achievements</span>');
     }
   });
-}  
+}
 
 // Function to generate game card HTML
 function generateGameCardHTML(game) {
@@ -46,71 +76,83 @@ function generateGameCardHTML(game) {
     const backgroundColor = ratingsColors(rating.percent);
     return `
       <div class="mb-3">
-        <span class="${backgroundColor} text-light rounded p-2">${rating.title ? rating.title: 'N/A'}:</span>
+        <span class="${backgroundColor} custom-white rounded p-2">${rating.title ? rating.title: 'N/A'}:</span>
         <span class="fw-bold">${rating.percent ? rating.percent: 'N/A'}%</span>
       </div>
     `;
   }).join('');
 
   // Get all platforms
-  const platformsHTML = game.platforms.map(platform => `
-    <span class="bg-info text-light rounded p-2 m-1">${platform.platform.name ? platform.platform.name: 'N/A'}</span>
-  `).join('');
+  const parentPlatformHTML = game.parent_platforms.map(parentPlatform => {
+    const platformIcon = platformIcons(parentPlatform.platform.name);
+    return `
+    <span class="rounded p-2 m-1 custom-blue custom-white">${platformIcon ? platformIcon: parentPlatform.platform.name}</span>
+    `; // display platform name if no icon
+  }).join('');
 
   // Get all genres
   const genresHTML = game.genres.map(genre => `
     <span>${genre.name ? genre.name: 'N/A'}</span>
   `).join('');
 
-  // Get all tags
-  const tagsHTML = game.tags.map(tag => `
-    <span class="bg-secondary rounded p-1 text-light mr-1 game-tags-span">${tag.name}</span>
-  `).join('');
-
   getGameAchievements(game.slug);
 
   const screenshotsHTML = game.short_screenshots.map((screenshot) => `
-    <img src="${screenshot.image}" height="100px" />
+    <img src="${screenshot.image}" class="m-2 rounded" height="100px" />
+  `).join('');
+
+  // Get all tags
+  const tagsHTML = game.tags.map(tag => `
+    <span class="m-1 game-tags-span">${tag.name}</span>
   `).join('');
 
   return `
   <div class="game-card-container">
-  <div class="card flex-row mb-3">
+  <div class="card flex-row mb-3 custom-gray">
     <img class="card-img-left card-img-responsive" src="${game.background_image}" />
     <div class="card-body">
       <div class="d-flex justify-content-between">
         <div class="game-title-holder">
-          <h5 class="card-title" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${game.name}</h5>
+          <h5 class="card-title custom-white">${game.name}</h5>
         </div>
-        <span class="bg-success rounded p-2 text-light" title="Metacritic Rating">${game.metacritic ? game.metacritic: 'N/A'}</span>
+        <span class="rounded p-2 text-light custom-green" title="Metacritic Rating">${game.metacritic ? game.metacritic: 'N/A'}</span>
       </div>
-      <p class="card-text">${game.released ? game.released: 'N/A'}</p>
+      <p class="card-text custom-calm-white"><i class="fa-solid fa-calendar-days"></i>&nbsp; ${game.released ? game.released: 'N/A'}</p>
       <div class="d-flex justify-content-center">
-        <a href="#" class="show_desc_btn d-flex justify-content-end">Reviews & Info</a>
+        <a href="#" class="show_desc_btn d-flex justify-content-end">More Details</a>
       </div>
     </div>
   </div>
 
   <div class="card-slider">
-    <div class="bg-secondary text-light rounded p-2 d-flex justify-content-around mb-3">
+    <div class="rounded p-2 d-flex justify-content-around mb-3 custom-gray">
       <span>Game length: ${game.playtime ? game.playtime + 'h' : 'N/A'}</span>
       <span>Genre: ${genresHTML}</span>
       <span>Rating: ${game.esrb_rating ? game.esrb_rating.name : 'N/A'}</span>
     </div>
     <div class="text-center mb-3">
-      <div class="platforms-container d-flex flex-wrap justify-content-center">${platformsHTML}</div>
-    </div>
-    <div class="d-flex justify-content-between m-4">
-      <span>${ratingsHTML}</span>
-      <span class="achievements-container-${game.slug}"></span> <!-- Use specific class for each game -->
+      <div class="platforms-container d-flex flex-wrap justify-content-center">${parentPlatformHTML}</div>
     </div>
 
-    <div div="d-flex justify-content-center">
+    <div class="d-flex justify-content-between m-4">
+      <div class="achievements-container">
+        <div class="btn-group">
+          <button class="achievement-open-all btn custom-blue custom-white">open all</button>
+        </div>
+        <span class="achievements-${game.slug}"></span>
+      </div>
+
+      <div>
+        <span>${ratingsHTML}</span>
+      </div>
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-center">
       ${screenshotsHTML}
     </div>
 
-    <div class="d-flex justify-content-between m-4">
-      <span>${tagsHTML}</span>
+    <div class="text-center rounded m-3 custom-calm-white custom-gray">
+      ${tagsHTML}
     </div>
   </div>
 </div>
@@ -124,7 +166,7 @@ function generateGameCards(container, games) {
     container.append(gameCardHTML);
   });
 
-  $('.card-slider').hide();
+  // $('.card-slider').hide();
 
   $('.show_desc_btn').click(function () {
     $(this).closest('.game-card-container').find('.card-slider').slideToggle();

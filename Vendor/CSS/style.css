@@ -1,4 +1,8 @@
-body { overflow: hidden; }
+body {
+  overflow: hidden;
+  background-color: rgb(20, 20, 20);
+  color: #bbbbbb;
+}
 
 * {
   margin: 0;
@@ -14,7 +18,7 @@ nav {
 
 nav .logoName {
   margin-right: 20px;
-  color: rgba(54, 54, 54, 0.733);
+  color: rgba(177, 177, 177, 0.842);
   letter-spacing: 5px;
 }
 
@@ -24,7 +28,7 @@ section {
   width: 40%;
   margin: 0 auto;
   padding: 10px;
-  box-shadow: 0px 0px 30px 5px rgba(150, 150, 150, 0.205);
+  border: 1px solid rgba(122, 122, 122, 0.192);
 }
 
 .search-container {
@@ -34,15 +38,65 @@ section {
 }
 
 .search-container form input {
-  width: 650px;
+  width: 700px;
   height: 55px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
+  background-color: rgba(44, 44, 44, 0.938);
+  border: none !important;
+  color: #ececec;
+}
+
+.search-container form input:focus {
+  background-color: rgba(44, 44, 44, 0.938);
+  color: #ececec;
+}
+
+.search-container form input::placeholder {
+  color: #bbbbbb;
 }
 
 .search-container form button {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
+  background-color: rgba(0, 128, 0, 0.938);
+  color: #ececec;
+}
+
+section .selectpicker {
+  background-color: #3a3a3a;
+  border: none;
+  color: #bbbbbb;
+  margin: 0 10px;
+}
+
+/* CUSTOM COLORS */
+.custom-white {
+  color: #ececec;
+}
+.custom-calm-white {
+  color: #bbbbbb;
+}
+.custom-blue {
+  background-color: rgba(27, 79, 250, 0.61);
+}
+.custom-gray {
+  background-color: rgba(44, 44, 44, 0.938);
+}
+.custom-green {
+  background-color: rgba(0, 128, 0, 0.938);
+}
+.custom-red {
+  background-color: rgba(161, 20, 20, 0.938);
+}
+.custom-yellow {
+  background-color: rgba(221, 166, 16, 0.938);
+}
+
+.card .card-game-name {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .card .description_container { white-space: pre-line; }
@@ -50,6 +104,28 @@ section {
 .game-title-holder { width: 200px; overflow: hidden; }
 
 .card-img-responsive { height: 150px; max-width: 250px; }
+
+.show_desc_btn {
+  text-decoration: none;
+  color: rgb(27, 79, 250);
+}
+
+.achievement-container {
+  width: 400px;
+}
+
+.achievement-description-container {
+  width: 350px;
+}
+
+.game-achievement-container .achievement-name {
+  color: #bbbbbb;
+  text-decoration: none;
+}
+
+.game-tags-span {
+  font-size: 14px;
+}
 
 @media only screen and (max-width: 500px) {
   .logo, .logoName { display: none; }
@@ -95,12 +171,12 @@ section {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: rgba(44, 44, 44, 0.938);
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: rgb(71, 71, 71);
 }
 
 /* Handle on hover */
