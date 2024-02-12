@@ -42,10 +42,10 @@ function getGameAchievements(gameSlug) { // retrieve game achievements
         const achievementsHTML = data.results.map(achievement => `
         <div class="game-achievement-container">
           <div>
-            <a href="#" class="achievement-name"><i class="fa-solid fa-caret-down"></i> ${achievement.name}</a>
+            <a href="#" class="achievement-name"><img src="${achievement.image}" height="20px" title="${achievement.name}"> &nbsp;<i class="fa-solid fa-caret-down"></i>&nbsp; ${achievement.name}</a>
           </div>
-          <div class="achievement-description-container">
-            <span> - ${achievement.description}</span>
+          <div class="mr-3 achievement-description-container">
+            <span>${achievement.description}</span>
           </div>
         </div>
         `).join('');
@@ -87,8 +87,20 @@ function generateGameCardHTML(game) {
     const platformIcon = platformIcons(parentPlatform.platform.name);
     return `
     <span class="rounded p-2 m-1 custom-blue custom-white">${platformIcon ? platformIcon: parentPlatform.platform.name}</span>
-    `; // display platform name if no icon
+    `;
   }).join('');
+
+  const requirementsHTML = game.platforms.map(platform => {
+    if (platform.platform.name === 'PC' && platform.requirements_en !== null) {
+        return `
+            <div>
+                ${platform.requirements_en.recommended}
+            </div>
+        `;
+    } else {
+      'no requirements found'
+    }
+}).join('');
 
   // Get all genres
   const genresHTML = game.genres.map(genre => `
@@ -117,11 +129,6 @@ function generateGameCardHTML(game) {
     $('#imagemodal').modal('show');
   });
 
-  // Get all tags
-  const tagsHTML = game.tags.map(tag => `
-    <span class="m-1 game-tags-span">${tag.name}</span>
-  `).join('');
-
   return `
   <div class="game-card-container">
   <div class="card flex-row mb-3 custom-gray">
@@ -131,16 +138,16 @@ function generateGameCardHTML(game) {
         <div class="game-title-holder">
           <h5 class="card-title custom-white">${game.name}</h5>
         </div>
-        <span class="rounded p-2 text-light custom-green" title="Metacritic Rating">${game.metacritic ? game.metacritic: 'N/A'}</span>
+        <p class="custom-calm-white">Metacritic&nbsp; <span class="rounded p-2 text-light custom-green" title="Metacritic Rating">${game.metacritic ? game.metacritic: 'N/A'}</span></p>
       </div>
       <p class="card-text custom-calm-white"><i class="fa-solid fa-calendar-days"></i>&nbsp; ${game.released ? game.released: 'N/A'}</p>
       <div class="d-flex justify-content-center">
-        <a href="#" class="show_desc_btn d-flex justify-content-end">More Details</a>
+        <a href="#" class="show_desc_btn d-flex fw-bold justify-content-end custom-calm-blue">More Details</a>
       </div>
     </div>
   </div>
 
-  <div class="card-slider">
+  <div class="card-slider mb-4 fw-bold">
     <div class="rounded p-2 d-flex justify-content-around mb-3 custom-gray">
       <span>Game length: ${game.playtime ? game.playtime + 'h' : 'N/A'}</span>
       <span>Genre: ${genresHTML}</span>
@@ -150,12 +157,19 @@ function generateGameCardHTML(game) {
       <div class="platforms-container d-flex flex-wrap justify-content-center">${parentPlatformHTML}</div>
     </div>
 
-    <div class="d-flex justify-content-between m-4">
+    <div class="d-flex justify-content-between mb-4">
       <div class="achievements-container">
-        <div class="btn-group">
-          <button class="achievement-open-all btn custom-blue custom-white">open all</button>
+        <div>
+          <h5 class="fw-bold">Achievements</h5>
+        </div>
+        <div class="d-flex justify-content-center open-all-container">
+          <a href="#" class="achievement-open-all custom-white">open all &nbsp;<i class="fa-solid fa-caret-down"></i></a>
         </div>
         <span class="achievements-${game.slug}"></span>
+      </div>
+
+      <div class="requirements-container">
+        <span>${requirementsHTML}</span>
       </div>
 
       <div>
@@ -165,10 +179,6 @@ function generateGameCardHTML(game) {
 
     <div class="d-flex flex-wrap justify-content-center">
       ${screenshotsHTML}
-    </div>
-
-    <div class="text-center rounded m-3 custom-calm-white custom-gray">
-      ${tagsHTML}
     </div>
   </div>
 </div>

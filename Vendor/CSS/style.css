@@ -18,14 +18,14 @@ nav {
 
 nav .logoName {
   margin-right: 20px;
-  color: rgba(177, 177, 177, 0.842);
+  color: rgb(71, 71, 71);
   letter-spacing: 5px;
 }
 
 section {
   overflow-y: scroll;
   height: 100vh;
-  width: 40%;
+  width: 45%;
   margin: 0 auto;
   padding: 10px;
   border: 1px solid rgba(122, 122, 122, 0.192);
@@ -64,7 +64,7 @@ section {
 }
 
 section .selectpicker {
-  background-color: #3a3a3a;
+  background-color: rgb(71, 71, 71);
   border: none;
   color: #bbbbbb;
   margin: 0 10px;
@@ -75,10 +75,13 @@ section .selectpicker {
   color: #ececec;
 }
 .custom-calm-white {
-  color: #bbbbbb;
+  color: #979797;
 }
 .custom-blue {
   background-color: rgba(27, 79, 250, 0.61);
+}
+.custom-calm-blue {
+  color: rgba(0, 140, 255, 0.877);
 }
 .custom-gray {
   background-color: rgba(44, 44, 44, 0.938);
@@ -107,7 +110,6 @@ section .selectpicker {
 
 .show_desc_btn {
   text-decoration: none;
-  color: rgb(27, 79, 250);
 }
 
 .achievement-container {
@@ -118,7 +120,17 @@ section .selectpicker {
   width: 350px;
 }
 
-.game-achievement-container .achievement-name {
+.achievement-name {
+  color: rgba(0, 140, 255, 0.877);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.open-all-container {
+  max-width: 200px;
+}
+
+.game-achievement-container, .achievement-open-all {
   color: #bbbbbb;
   text-decoration: none;
 }
@@ -133,6 +145,10 @@ section .selectpicker {
 #imagepreview {
   max-width: 100%; /* Ensure the image doesn't exceed the width of the modal content */
   max-height: 100%; /* Ensure the image doesn't exceed the height of the modal content */
+}
+
+.card-image-enlarge:hover {
+  opacity: 80%;
 }
 
 .game-tags-span {
