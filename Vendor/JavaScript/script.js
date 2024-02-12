@@ -75,7 +75,7 @@ function generateGameCardHTML(game) {
   const ratingsHTML = game.ratings.map(rating => {
     const backgroundColor = ratingsColors(rating.percent);
     return `
-      <div class="mb-3">
+      <div class="mb-4">
         <span class="${backgroundColor} custom-white rounded p-2">${rating.title ? rating.title: 'N/A'}:</span>
         <span class="fw-bold">${rating.percent ? rating.percent: 'N/A'}%</span>
       </div>
@@ -98,8 +98,24 @@ function generateGameCardHTML(game) {
   getGameAchievements(game.slug);
 
   const screenshotsHTML = game.short_screenshots.map((screenshot) => `
-    <img src="${screenshot.image}" class="m-2 rounded" height="100px" />
+    <a href="#" class="card-image-enlarge" data-image-src="${screenshot.image}">
+      <img src="${screenshot.image}" class="m-2 rounded" height="120px">
+    </a>
+
+    <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <img src="${screenshot.image}" id="imagepreview" >
+        </div>
+      </div>
+    </div>
   `).join('');
+
+  $(".card-image-enlarge").on("click", function() {
+    var imageUrl = $(this).data('image-src');
+    $('#imagepreview').attr('src', imageUrl);
+    $('#imagemodal').modal('show');
+  });
 
   // Get all tags
   const tagsHTML = game.tags.map(tag => `
@@ -143,7 +159,7 @@ function generateGameCardHTML(game) {
       </div>
 
       <div>
-        <span>${ratingsHTML}</span>
+        ${ratingsHTML}
       </div>
     </div>
 

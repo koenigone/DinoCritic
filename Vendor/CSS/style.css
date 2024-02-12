@@ -101,7 +101,7 @@ section .selectpicker {
 
 .card .description_container { white-space: pre-line; }
 
-.game-title-holder { width: 200px; overflow: hidden; }
+.game-title-holder { width: 250px; overflow: hidden; }
 
 .card-img-responsive { height: 150px; max-width: 250px; }
 
@@ -121,6 +121,18 @@ section .selectpicker {
 .game-achievement-container .achievement-name {
   color: #bbbbbb;
   text-decoration: none;
+}
+
+.modal-content {
+  display: flex;
+  justify-content: center; /* Center the content horizontally */
+  align-items: center; /* Center the content vertically */
+  height: 100%; /* Ensure the modal content takes up the full height */
+}
+
+#imagepreview {
+  max-width: 100%; /* Ensure the image doesn't exceed the width of the modal content */
+  max-height: 100%; /* Ensure the image doesn't exceed the height of the modal content */
 }
 
 .game-tags-span {
@@ -157,7 +169,7 @@ section .selectpicker {
   section { width: 60%; }
   .search-container form input { width: 400px; height: 45px; }
   .card-img-responsive { height: 132px; max-width: 220px; }
-  .game-title-holder { width: 170px; }
+  .game-title-holder { width: 240px; }
   .game-card-container h5 { font-size: 21px; }
   .game-card-container span { font-size: 16px; }
   .game-card-container p, a { font-size: 16px; }
