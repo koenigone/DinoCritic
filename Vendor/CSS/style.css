@@ -59,7 +59,7 @@ section {
 .search-container form button {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
-  background-color: rgba(0, 128, 0, 0.938);
+  background-color: rgba(3, 107, 3, 0.938);
   color: #ececec;
 }
 
@@ -78,7 +78,7 @@ section .selectpicker {
   color: #979797;
 }
 .custom-blue {
-  background-color: rgba(27, 79, 250, 0.61);
+  background-color: rgba(25, 72, 228, 0.61);
 }
 .custom-calm-blue {
   color: rgba(0, 140, 255, 0.877);
@@ -87,10 +87,10 @@ section .selectpicker {
   background-color: rgba(44, 44, 44, 0.938);
 }
 .custom-green {
-  background-color: rgba(0, 128, 0, 0.938);
+  background-color: rgba(3, 107, 3, 0.938);
 }
 .custom-red {
-  background-color: rgba(161, 20, 20, 0.938);
+  background-color: rgba(133, 18, 18, 0.938);
 }
 .custom-yellow {
   background-color: rgba(221, 166, 16, 0.938);
@@ -113,11 +113,12 @@ section .selectpicker {
 }
 
 .achievement-container {
-  width: 400px;
+  max-width: 200px;
 }
 
 .achievement-description-container {
-  width: 350px;
+  max-width: 210px;
+  margin-left: 20px;
 }
 
 .achievement-name {
@@ -133,6 +134,10 @@ section .selectpicker {
 .game-achievement-container, .achievement-open-all {
   color: #bbbbbb;
   text-decoration: none;
+}
+
+.requirements-container {
+  max-width: 270px;
 }
 
 .modal-content {
@@ -151,9 +156,6 @@ section .selectpicker {
   opacity: 80%;
 }
 
-.game-tags-span {
-  font-size: 14px;
-}
 
 @media only screen and (max-width: 500px) {
   .logo, .logoName { display: none; }

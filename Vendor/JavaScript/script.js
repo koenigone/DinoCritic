@@ -92,15 +92,15 @@ function generateGameCardHTML(game) {
 
   const requirementsHTML = game.platforms.map(platform => {
     if (platform.platform.name === 'PC' && platform.requirements_en !== null) {
+      $('.no-req-found').css('display', 'none');
+      $('.recommended-req').css('display', 'block');
         return `
             <div>
                 ${platform.requirements_en.recommended}
             </div>
         `;
-    } else {
-      'no requirements found'
     }
-}).join('');
+  }).join('');
 
   // Get all genres
   const genresHTML = game.genres.map(genre => `
@@ -157,8 +157,8 @@ function generateGameCardHTML(game) {
       <div class="platforms-container d-flex flex-wrap justify-content-center">${parentPlatformHTML}</div>
     </div>
 
-    <div class="d-flex justify-content-between mb-4">
-      <div class="achievements-container">
+    <div class="d-flex justify-content-between mb-4 achievements-container">
+      <div>
         <div>
           <h5 class="fw-bold">Achievements</h5>
         </div>
@@ -169,7 +169,8 @@ function generateGameCardHTML(game) {
       </div>
 
       <div class="requirements-container">
-        <span>${requirementsHTML}</span>
+        <span class="recommended-req" style="display: none;">${requirementsHTML ? requirementsHTML: 'N/A'}</span>
+        <span class="no-req-found">No Requirements Found</span>
       </div>
 
       <div>
