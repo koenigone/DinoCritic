@@ -27,6 +27,7 @@ nav .logoName {
 }
 
 section {
+  overflow-x: hidden;
   overflow-y: scroll;
   height: 100vh;
   width: 40%;
@@ -157,9 +158,17 @@ section .selectpicker {
   opacity: 80%;
 }
 
+.current-version {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  font-weight: bold;
+  width: 100px;
+}
+
 /* RESPONSIVE DESIGN */
 @media only screen and (max-width: 500px) { /* MOBILE */
-  .logo, .logoName { display: none; }
+  .logoName { display: none; }
   section { width: 100%; }
   .search-container form input { width: 280px; height: 45px; }
   .form-select { font-size: 11px; }
@@ -172,6 +181,7 @@ section .selectpicker {
   .metacritic-title { display: none; }
   .achievements-ratings-container { margin: 0 10px; }
   .achievement-description-container { max-width: 170px; }
+  .current-version { display: none; }
 }
 
 @media only screen and (min-width: 501px) and (max-width: 900px) { /* TAPLET */
