@@ -34,7 +34,6 @@ if (isset($_POST['genreValue'])) {
     $sortGenresResponse['message'] = 'Error sorting by genre:' . $sortGenresERR;
   }
 } else {
-  // Handle case where genreValue is not set
   $sortGenresResponse['success'] = false;
   $sortGenresResponse['message'] = 'Genre value not provided';
 }

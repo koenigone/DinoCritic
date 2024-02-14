@@ -9,11 +9,10 @@ if (isset($_POST['gameName'])) {
     $gameCriticCURL = curl_init();
 
     curl_setopt_array($gameCriticCURL, [
-      CURLOPT_URL => 'https://api.rawg.io/api/games?key=ce159359e89a44c69acc5360188d2333&search=' . urlencode($gameName) . '&page_size=5',
+      CURLOPT_URL => 'https://api.rawg.io/api/games?key=ce159359e89a44c69acc5360188d2333&search=' . urlencode($gameName) . '&page_size=100',
       CURLOPT_RETURNTRANSFER => true,
     ]);  
 
-    // Execute cURL session and get the response
     $gameCriticResult = curl_exec($gameCriticCURL);
     $gameCriticERR = curl_error($gameCriticCURL);
     curl_close($gameCriticCURL);
@@ -24,18 +23,15 @@ if (isset($_POST['gameName'])) {
         $getCriticResponse['success'] = true;
         $getCriticResponse['message'] = 'Games retrieved successfully';
         $getCriticResponse['data'] = $decodeGameCriticResult;
-        echo json_encode($getCriticResponse);
 
     } else {
         $getCriticResponse['success'] = false;
         $getCriticResponse['message'] = 'cURL Error #:' . $gameCriticERR;
-
-        echo json_encode($getCriticResponse);
     }
 } else {
     $getCriticResponse['success'] = false;
     $getCriticResponse['message'] = 'Game name not found';
-
-    echo json_encode($getCriticResponse);
 }
+
+echo json_encode($getCriticResponse);
 ?>

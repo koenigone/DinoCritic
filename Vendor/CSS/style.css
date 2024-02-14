@@ -16,6 +16,10 @@ nav {
   z-index: -1;
 }
 
+nav .logo {
+  z-index: -10;
+}
+
 nav .logoName {
   margin-right: 20px;
   color: rgb(71, 71, 71);
@@ -25,7 +29,7 @@ nav .logoName {
 section {
   overflow-y: scroll;
   height: 100vh;
-  width: 45%;
+  width: 40%;
   margin: 0 auto;
   padding: 10px;
   border: 1px solid rgba(122, 122, 122, 0.192);
@@ -96,6 +100,7 @@ section .selectpicker {
   background-color: rgba(221, 166, 16, 0.938);
 }
 
+/* GAME CARDS STYLING */
 .card .card-game-name {
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -108,16 +113,16 @@ section .selectpicker {
 
 .card-img-responsive { height: 150px; max-width: 250px; }
 
+.achievements-ratings-container {
+  margin: 0 50px;
+}
+
 .show_desc_btn {
   text-decoration: none;
 }
 
-.achievement-container {
-  max-width: 200px;
-}
-
 .achievement-description-container {
-  max-width: 210px;
+  max-width: 330px;
   margin-left: 20px;
 }
 
@@ -136,40 +141,40 @@ section .selectpicker {
   text-decoration: none;
 }
 
-.requirements-container {
-  max-width: 270px;
-}
-
 .modal-content {
   display: flex;
-  justify-content: center; /* Center the content horizontally */
-  align-items: center; /* Center the content vertically */
-  height: 100%; /* Ensure the modal content takes up the full height */
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 #imagepreview {
-  max-width: 100%; /* Ensure the image doesn't exceed the width of the modal content */
-  max-height: 100%; /* Ensure the image doesn't exceed the height of the modal content */
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .card-image-enlarge:hover {
   opacity: 80%;
 }
 
-
-@media only screen and (max-width: 500px) {
+/* RESPONSIVE DESIGN */
+@media only screen and (max-width: 500px) { /* MOBILE */
   .logo, .logoName { display: none; }
   section { width: 100%; }
   .search-container form input { width: 280px; height: 45px; }
   .form-select { font-size: 11px; }
-  .card-img-responsive { height: 115px; max-width: 160px; }
-  .game-title-holder { width: 110px; }
+  .card-img-responsive { height: 120px; max-width: 165px; }
+  .game-title-holder { width: 120px; }
+  .metacritic-title { display: none; }
   .game-card-container h5 { font-size: 15px; }
   .game-card-container span { font-size: 12px; }
   .game-card-container p, a { font-size: 11px; }
+  .metacritic-title { display: none; }
+  .achievements-ratings-container { margin: 0 10px; }
+  .achievement-description-container { max-width: 170px; }
 }
 
-@media only screen and (min-width: 501px) and (max-width: 800px) {
+@media only screen and (min-width: 501px) and (max-width: 900px) { /* TAPLET */
   .logoName { display: none; }
   nav .logo { position: relative; margin-left: 20px; }
   section { width: 100%; }
@@ -179,37 +184,35 @@ section .selectpicker {
   .game-card-container h5 { font-size: 18px; }
   .game-card-container span { font-size: 14px; }
   .game-card-container p, a { font-size: 14px; }
+  .achievements-ratings-container { margin: 0 0px; }
 }
 
-@media only screen and (min-width: 801px) and (max-width: 1800px) {
+@media only screen and (min-width: 901px) and (max-width: 1800px) { /* DESKTOP */
   nav .logoName { font-size: 25px; margin-top: 20px; writing-mode: vertical-rl; }
   nav .logo { position: relative; margin-left: 20px; }
-  section { width: 60%; }
+  section { width: 70%; }
   .search-container form input { width: 400px; height: 45px; }
   .card-img-responsive { height: 132px; max-width: 220px; }
   .game-title-holder { width: 240px; }
   .game-card-container h5 { font-size: 21px; }
   .game-card-container span { font-size: 16px; }
   .game-card-container p, a { font-size: 16px; }
+  .achievement-description-container { max-width: 250px; }
 }
 
 /* CUSTOM SCROLLBAR */
-/* width */
-::-webkit-scrollbar {
+::-webkit-scrollbar { /* width */
   width: 7px;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
+::-webkit-scrollbar-track { /* Track */
   background: rgba(44, 44, 44, 0.938);
 }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb { /* Handle */
   background: rgb(71, 71, 71);
 }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover { /* Handle on hover */
   background: #797979;
 }

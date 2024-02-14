@@ -90,18 +90,6 @@ function generateGameCardHTML(game) {
     `;
   }).join('');
 
-  const requirementsHTML = game.platforms.map(platform => {
-    if (platform.platform.name === 'PC' && platform.requirements_en !== null) {
-      $('.no-req-found').css('display', 'none');
-      $('.recommended-req').css('display', 'block');
-        return `
-            <div>
-                ${platform.requirements_en.recommended}
-            </div>
-        `;
-    }
-  }).join('');
-
   // Get all genres
   const genresHTML = game.genres.map(genre => `
     <span>${genre.name ? genre.name: 'N/A'}</span>
@@ -138,7 +126,7 @@ function generateGameCardHTML(game) {
         <div class="game-title-holder">
           <h5 class="card-title custom-white">${game.name}</h5>
         </div>
-        <p class="custom-calm-white">Metacritic&nbsp; <span class="rounded p-2 text-light custom-green" title="Metacritic Rating">${game.metacritic ? game.metacritic: 'N/A'}</span></p>
+        <p class="custom-calm-white"><span class="metacritic-title">Metacritic</span> &nbsp;<span class="rounded p-2 text-light custom-green" title="Metacritic Rating">${game.metacritic ? game.metacritic: 'N/A'}</span></p>
       </div>
       <p class="card-text custom-calm-white"><i class="fa-solid fa-calendar-days"></i>&nbsp; ${game.released ? game.released: 'N/A'}</p>
       <div class="d-flex justify-content-center">
@@ -157,7 +145,7 @@ function generateGameCardHTML(game) {
       <div class="platforms-container d-flex flex-wrap justify-content-center">${parentPlatformHTML}</div>
     </div>
 
-    <div class="d-flex justify-content-between mb-4 achievements-container">
+    <div class="d-flex justify-content-between mb-4 achievements-ratings-container">
       <div>
         <div>
           <h5 class="fw-bold">Achievements</h5>
@@ -166,11 +154,6 @@ function generateGameCardHTML(game) {
           <a href="#" class="achievement-open-all custom-white">open all &nbsp;<i class="fa-solid fa-caret-down"></i></a>
         </div>
         <span class="achievements-${game.slug}"></span>
-      </div>
-
-      <div class="requirements-container">
-        <span class="recommended-req" style="display: none;">${requirementsHTML ? requirementsHTML: 'N/A'}</span>
-        <span class="no-req-found">No Requirements Found</span>
       </div>
 
       <div>
@@ -193,7 +176,7 @@ function generateGameCards(container, games) {
     container.append(gameCardHTML);
   });
 
-  // $('.card-slider').hide();
+  $('.card-slider').hide();
 
   $('.show_desc_btn').click(function () {
     $(this).closest('.game-card-container').find('.card-slider').slideToggle();
