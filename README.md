@@ -1,4 +1,4 @@
-![DinoCriticsSS](https://github.com/koenigone/DinoCritic/blob/main/project7-img.png)
+![DinoCriticsSS]([https://github.com/koenigone/DinoCritic/blob/main/project7-img.png](https://github.com/koenigone/DinoCritic/blob/main/Vendor/Img/project7-img.png))
 
 Name: DinoCritics
 
